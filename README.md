@@ -21,10 +21,39 @@ Comprehensive backup solution for ComfyUI Electron installation with Git version
 
 ## Quick Start
 
-### Interactive Installation
+### 🎯 Easiest Method: Use the Interactive Menu (Recommended)
 
-Run the script in install mode for guided setup:
+**Double-click `RunBackup.bat`** for an easy-to-use menu interface:
 
+```
+====================================
+  ComfyUI Backup Quick Launcher
+====================================
+
+Choose an option:
+  1. Run Backup (Git)
+  2. Run Backup (Archive)
+  3. List Available Backups
+  4. Rollback to Previous
+  5. Install/Setup
+  6. Exit
+```
+
+This menu:
+- ✅ No command-line knowledge needed
+- ✅ Returns to menu after each operation
+- ✅ Perfect for daily use
+- ✅ Works by double-clicking the file
+
+**For restore operations**, double-click `QuickRestore.bat` for a guided restore process.
+
+### Interactive Installation (For First-Time Setup)
+
+Run the install wizard for automated setup:
+
+**Via Menu**: Double-click `RunBackup.bat` → Choose option 5
+
+**Via PowerShell**:
 ```powershell
 .\ComfyUI-Backup.ps1 -Mode Install
 ```
@@ -36,7 +65,7 @@ This will:
 4. Create Start Menu shortcut
 5. Perform initial backup
 
-### Manual Usage
+### Advanced: Manual PowerShell Usage
 
 **Create a backup:**
 ```powershell
@@ -89,7 +118,12 @@ This will:
 
 ```
 ComfyDesktopBackup/
-├── ComfyUI-Backup.ps1          # Main script
+├── RunBackup.bat               # 🎯 Main interactive menu (double-click this!)
+├── QuickRestore.bat            # Restore helper menu
+├── ComfyUI-Backup.ps1          # PowerShell script (advanced usage)
+├── START_HERE.txt              # Quick start guide
+├── USAGE.txt                   # Detailed usage instructions
+├── SCENARIOS.txt               # Common usage scenarios
 ├── Backups/
 │   ├── GitRepo/                # Git repository (if using Git)
 │   └── Archives/               # ZIP files (if using Archive)
@@ -148,17 +182,21 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ## Examples
 
 **Daily automated Git backups at 2 AM:**
-```powershell
-.\ComfyUI-Backup.ps1 -Mode Install
-# Choose option 1 (Git), enter 02:00
-```
+- Double-click `RunBackup.bat`
+- Choose option 5 (Install/Setup)
+- Select Git backup, enter time 02:00
 
 **Manual backup before major changes:**
-```powershell
-.\ComfyUI-Backup.ps1 -Mode Backup -BackupType Git
-```
+- Double-click `RunBackup.bat`
+- Choose option 1 (Git) or 2 (Archive)
 
 **Restore after something breaks:**
+- Double-click `QuickRestore.bat`
+- View available backups
+- Choose restore method
+- Follow the prompts
+
+**Advanced PowerShell examples:**
 ```powershell
 # List backups
 .\ComfyUI-Backup.ps1 -Mode ListBackups

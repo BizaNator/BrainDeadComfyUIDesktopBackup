@@ -2,6 +2,8 @@
 REM Quick Restore Helper
 REM Lists backups and helps you restore
 
+:menu
+cls
 echo.
 echo ====================================
 echo   ComfyUI Quick Restore
@@ -18,7 +20,7 @@ echo Choose restore type:
 echo   1. Restore from Git commit
 echo   2. Restore from Archive file
 echo   3. Quick Rollback (previous backup)
-echo   4. Cancel
+echo   4. Return to Main Menu / Exit
 echo.
 
 set /p choice="Enter choice (1-4): "
@@ -30,11 +32,14 @@ if "%choice%"=="1" (
     echo WARNING: This will replace your current installation!
     set /p confirm="Are you sure? (yes/no): "
     if /i "%confirm%"=="yes" (
+        echo.
         powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Restore -BackupType Git -RestorePoint "%commit%"
+        goto continue
     ) else (
         echo Cancelled.
+        timeout /t 2 >nul
+        goto menu
     )
-    goto end
 )
 
 if "%choice%"=="2" (
@@ -44,11 +49,14 @@ if "%choice%"=="2" (
     echo WARNING: This will replace your current installation!
     set /p confirm="Are you sure? (yes/no): "
     if /i "%confirm%"=="yes" (
+        echo.
         powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Restore -BackupType Archive -RestorePoint "%archive%"
+        goto continue
     ) else (
         echo Cancelled.
+        timeout /t 2 >nul
+        goto menu
     )
-    goto end
 )
 
 if "%choice%"=="3" (
@@ -58,25 +66,35 @@ if "%choice%"=="3" (
     echo WARNING: This will replace your current installation!
     set /p confirm="Are you sure? (yes/no): "
     if /i "%confirm%"=="yes" (
+        echo.
         if /i "%backuptype%"=="G" (
             powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
         ) else (
             powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
         )
+        goto continue
     ) else (
         echo Cancelled.
+        timeout /t 2 >nul
+        goto menu
     )
-    goto end
 )
 
 if "%choice%"=="4" (
-    echo Cancelled.
-    goto end
+    echo.
+    echo Exiting...
+    exit /b
 )
 
-echo Invalid choice!
-
-:end
 echo.
-echo Press any key to exit...
-pause >nul
+echo Invalid choice! Please try again.
+timeout /t 2 >nul
+goto menu
+
+:continue
+echo.
+echo.
+echo ====================================
+echo.
+set /p return="Press ENTER to return to menu..."
+goto menu

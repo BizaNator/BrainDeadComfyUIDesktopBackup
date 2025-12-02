@@ -131,7 +131,9 @@ function Backup-WithGit {
             '/W:5',
             '/NFL', # No file list
             '/NDL', # No directory list
-            '/NP'   # No progress
+            '/NP',   # No progress
+            '/XD',   # Exclude directories
+            '.git'   # Don't delete the .git folder
         )
 
         foreach ($pattern in $excludePatterns) {
@@ -231,7 +233,12 @@ function Get-AvailableBackups {
     if (Test-Path "$GitBackupPath\.git") {
         Write-Log "`nGit Backups:" -Level Info
         Push-Location $GitBackupPath
-        git log --oneline -20 --format="%h - %ar - %s"
+        $gitLog = git log --oneline -20 --format="%h - %ar - %s" 2>&1
+        if ($gitLog) {
+            $gitLog | ForEach-Object {
+                Write-Log "  $_" -Level Info
+            }
+        }
         Pop-Location
     }
 
