@@ -383,6 +383,16 @@ function Invoke-Rollback {
         }
 
         Push-Location $GitBackupPath
+
+        # Check if there are at least 2 commits
+        $commitCount = (git rev-list --count HEAD 2>$null)
+        if ($commitCount -lt 2) {
+            Pop-Location
+            Write-Log "Cannot rollback: Only $commitCount commit(s) in history. Need at least 2 commits." -Level Error
+            Write-Log "Tip: Run a backup first to create a new commit, then rollback will restore the previous state." -Level Info
+            return $false
+        }
+
         $previousCommit = git rev-parse HEAD~1 2>$null
         Pop-Location
 
