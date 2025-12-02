@@ -52,25 +52,29 @@ if "%choice%"=="4" (
     echo   3. Cancel
     echo.
     set /p backuptype="Enter choice (1-3): "
-    set "backuptype=%backuptype: =%"
     echo.
+
     if "%backuptype%"=="1" (
         echo Rollback using Git...
         powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
         goto continue
-    ) else if "%backuptype%"=="2" (
+    )
+
+    if "%backuptype%"=="2" (
         echo Rollback using Archive...
         powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
         goto continue
-    ) else if "%backuptype%"=="3" (
+    )
+
+    if "%backuptype%"=="3" (
         echo Cancelled.
         timeout /t 2 >nul
         goto menu
-    ) else (
-        echo Invalid choice! Please try again.
-        timeout /t 2 >nul
-        goto menu
     )
+
+    echo Invalid choice! Please try again.
+    timeout /t 2 >nul
+    goto menu
 )
 
 if "%choice%"=="5" (

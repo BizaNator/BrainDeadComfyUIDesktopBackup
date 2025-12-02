@@ -47,19 +47,27 @@
 - Selecting option 3 triggered Archive rollback (should be option 2)
 
 **Root Cause**:
-- The `set /p` command can capture whitespace (spaces) along with the input
-- String comparison `"%backuptype%"=="1"` failed when variable contained " 1" or "1 "
-- Caused first condition to fail, making subsequent options map incorrectly
+- The rollback submenu used `else if` chaining for multiple conditions
+- Main menu used separate `if` statements for each option
+- Batch file `else if` syntax caused parsing issues with nested conditionals
+- All numeric inputs (1, 2, 3) were falling through to the else block
 
 **Solution**:
-- Added whitespace trimming after capturing input: `set "backuptype=%backuptype: =%"`
-- This removes all spaces from the input variable before comparison
-- Applied to both RunBackup.bat and QuickRestore.bat
+- Replaced `else if` chain with separate `if` statements (matching main menu pattern)
+- Removed whitespace trimming (not needed with correct if structure)
+- Each option now has its own independent if block with goto statements
+- Invalid choice handling at the end without else clause
 
-**Code Change** (RunBackup.bat:55 and QuickRestore.bat:70):
+**Code Change** (RunBackup.bat:57-77 and QuickRestore.bat:72-108):
 ```batch
-set /p backuptype="Enter choice (1-3): "
-set "backuptype=%backuptype: =%"
+# BEFORE (broken):
+if "%backuptype%"=="1" (...) else if "%backuptype%"=="2" (...) else if "%backuptype%"=="3" (...)
+
+# AFTER (working):
+if "%backuptype%"=="1" (...)
+if "%backuptype%"=="2" (...)
+if "%backuptype%"=="3" (...)
+echo Invalid choice!
 ```
 
 ---

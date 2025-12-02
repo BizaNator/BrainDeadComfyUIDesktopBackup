@@ -67,8 +67,8 @@ if "%choice%"=="3" (
     echo   3. Cancel
     echo.
     set /p backuptype="Enter choice (1-3): "
-    set "backuptype=%backuptype: =%"
     echo.
+
     if "%backuptype%"=="1" (
         echo WARNING: This will replace your current installation!
         set /p confirm="Are you sure? (yes/no): "
@@ -77,12 +77,13 @@ if "%choice%"=="3" (
             echo Rollback using Git...
             powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
             goto continue
-        ) else (
-            echo Cancelled.
-            timeout /t 2 >nul
-            goto menu
         )
-    ) else if "%backuptype%"=="2" (
+        echo Cancelled.
+        timeout /t 2 >nul
+        goto menu
+    )
+
+    if "%backuptype%"=="2" (
         echo WARNING: This will replace your current installation!
         set /p confirm="Are you sure? (yes/no): "
         if /i "%confirm%"=="yes" (
@@ -90,20 +91,21 @@ if "%choice%"=="3" (
             echo Rollback using Archive...
             powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
             goto continue
-        ) else (
-            echo Cancelled.
-            timeout /t 2 >nul
-            goto menu
         )
-    ) else if "%backuptype%"=="3" (
         echo Cancelled.
         timeout /t 2 >nul
         goto menu
-    ) else (
-        echo Invalid choice! Please try again.
+    )
+
+    if "%backuptype%"=="3" (
+        echo Cancelled.
         timeout /t 2 >nul
         goto menu
     )
+
+    echo Invalid choice! Please try again.
+    timeout /t 2 >nul
+    goto menu
 )
 
 if "%choice%"=="4" (
