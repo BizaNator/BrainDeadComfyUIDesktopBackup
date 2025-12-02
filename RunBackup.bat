@@ -46,19 +46,30 @@ if "%choice%"=="3" (
 
 if "%choice%"=="4" (
     echo.
-    set /p backuptype="Rollback using (G)it or (A)rchive? "
+    echo Choose backup type to rollback:
+    echo   1. Git
+    echo   2. Archive
+    echo   3. Cancel
     echo.
-    if /i "%backuptype%"=="G" (
-        echo Using Git backup...
+    set /p backuptype="Enter choice (1-3): "
+    echo.
+    if "%backuptype%"=="1" (
+        echo Rollback using Git...
         powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
-    ) else if /i "%backuptype%"=="A" (
-        echo Using Archive backup...
+        goto continue
+    ) else if "%backuptype%"=="2" (
+        echo Rollback using Archive...
         powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
+        goto continue
+    ) else if "%backuptype%"=="3" (
+        echo Cancelled.
+        timeout /t 2 >nul
+        goto menu
     ) else (
-        echo Invalid choice. Using Archive backup as default...
-        powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
+        echo Invalid choice! Please try again.
+        timeout /t 2 >nul
+        goto menu
     )
-    goto continue
 )
 
 if "%choice%"=="5" (
