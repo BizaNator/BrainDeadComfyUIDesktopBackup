@@ -10,7 +10,7 @@
 **Tests Passed**: 8 ✅
 **Tests Failed**: 0 ❌
 **Success Rate**: 100%
-**Issues Fixed**: 3 ✅
+**Issues Fixed**: 4 ✅
 
 ---
 
@@ -78,7 +78,41 @@ if "%backuptype%"=="2" (...)
 
 ---
 
-### Issue 3: Git Log Not Displaying in ListBackups
+### Issue 3: Git Rollback Error with Single Commit
+**Severity**: Medium
+**Status**: ✅ Fixed
+
+**Problem**:
+- User attempting to rollback with only one commit in repository
+- Error message: "Commit hash not found: HEAD~1"
+- Confusing error - didn't explain that rollback requires at least 2 commits
+
+**Root Cause**:
+- `git rev-parse HEAD~1` returns nothing when there's only one commit (no parent)
+- Script passed empty/null value to restore function
+- Restore function tried to validate empty commit hash, resulting in cryptic error
+
+**Solution**:
+- Added commit count check before attempting rollback
+- Now requires at least 2 commits to perform rollback
+- Provides clear error: "Cannot rollback: Only X commit(s) in history. Need at least 2 commits."
+- Added helpful tip: "Run a backup first to create a new commit, then rollback will restore the previous state."
+
+**Code Change** (ComfyUI-Backup.ps1:387-394):
+```powershell
+# Check if there are at least 2 commits
+$commitCount = (git rev-list --count HEAD 2>$null)
+if ($commitCount -lt 2) {
+    Pop-Location
+    Write-Log "Cannot rollback: Only $commitCount commit(s) in history. Need at least 2 commits." -Level Error
+    Write-Log "Tip: Run a backup first to create a new commit, then rollback will restore the previous state." -Level Info
+    return $false
+}
+```
+
+---
+
+### Issue 4: Git Log Not Displaying in ListBackups
 **Severity**: Medium
 **Status**: ✅ Fixed
 
@@ -302,11 +336,12 @@ Archive Backups:
 
 ## Conclusion
 
-The ComfyUI Backup Script has passed all basic functional tests. The three issues discovered during testing have been successfully resolved:
+The ComfyUI Backup Script has passed all basic functional tests. The four issues discovered during testing have been successfully resolved:
 
 1. ✅ Git repository now persists correctly across backups
-2. ✅ Numbered menu rollback selection now works correctly (whitespace trimming fix)
-3. ✅ ListBackups now displays Git commit history properly
+2. ✅ Numbered menu rollback selection now works correctly (nested if block fix with labels)
+3. ✅ Git rollback now provides clear error messages for single-commit repos
+4. ✅ ListBackups now displays Git commit history properly
 
 The script is **ready for production use** with the following notes:
 - Core backup functionality verified

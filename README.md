@@ -210,6 +210,12 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 - Note: This is for manual backups, NOT automatic startup
 - Automatic backups run via Windows Task Scheduler
 
+**"Cannot rollback: Only 1 commit(s) in history"**
+- Rollback requires at least 2 commits to restore from the previous one
+- Solution: Run a backup first to create a second commit
+- Then rollback will restore to the state before that backup
+- First backup creates initial snapshot; second backup allows rollback to first
+
 ## Examples
 
 **Daily automated Git backups at 2 AM:**
