@@ -1,0 +1,259 @@
+================================================================================
+                    ComfyUI BACKUP SCRIPT - QUICK START GUIDE
+================================================================================
+
+📁 BACKUP LOCATION: %LOCALAPPDATA%\Programs\@comfyorgcomfyui-electron
+
+================================================================================
+                              🚀 GETTING STARTED
+================================================================================
+
+METHOD 1: Interactive Setup (Recommended for First Time)
+---------------------------------------------------------
+Double-click: RunBackup.bat
+Choose option 5 (Install/Setup)
+Follow the prompts
+
+
+METHOD 2: Quick Backup
+---------------------------------------------------------
+Double-click: RunBackup.bat
+Choose option 1 (Git) or 2 (Archive)
+
+
+METHOD 3: Command Line (Advanced)
+---------------------------------------------------------
+Open PowerShell in this folder and run:
+    .\ComfyUI-Backup.ps1 -Mode Backup -BackupType Git
+
+================================================================================
+                           📋 COMMON OPERATIONS
+================================================================================
+
+CREATE A BACKUP
+---------------
+Double-click: RunBackup.bat → Choose option 1 or 2
+
+Or from PowerShell:
+    .\ComfyUI-Backup.ps1 -Mode Backup -BackupType Git
+    .\ComfyUI-Backup.ps1 -Mode Backup -BackupType Archive
+
+
+LIST AVAILABLE BACKUPS
+----------------------
+Double-click: RunBackup.bat → Choose option 3
+
+Or from PowerShell:
+    .\ComfyUI-Backup.ps1 -Mode ListBackups
+
+
+RESTORE FROM BACKUP
+-------------------
+Double-click: QuickRestore.bat → Follow prompts
+
+Or from PowerShell:
+    .\ComfyUI-Backup.ps1 -Mode Restore -BackupType Git -RestorePoint abc1234
+    .\ComfyUI-Backup.ps1 -Mode Restore -BackupType Archive -RestorePoint "filename.zip"
+
+
+QUICK ROLLBACK (Undo to Previous Backup)
+-----------------------------------------
+Double-click: RunBackup.bat → Choose option 4
+
+Or from PowerShell:
+    .\ComfyUI-Backup.ps1 -Mode Rollback -BackupType Git
+
+
+CREATE SCHEDULED TASK (Daily Automatic Backup)
+-----------------------------------------------
+Double-click: RunBackup.bat → Choose option 5
+
+Or from PowerShell (run as Administrator):
+    .\ComfyUI-Backup.ps1 -Mode CreateSchedule -BackupType Git -ScheduleTime "02:00"
+
+
+CREATE START MENU SHORTCUT
+---------------------------
+From PowerShell:
+    .\ComfyUI-Backup.ps1 -Mode CreateShortcut -BackupType Git
+
+================================================================================
+                        🔍 UNDERSTANDING BACKUP TYPES
+================================================================================
+
+GIT BACKUP (Recommended)
+------------------------
+✓ Space efficient (stores only changes)
+✓ Unlimited restore points
+✓ Full version history
+✓ Fast operations
+✗ Requires Git for Windows
+
+Files stored in: .\Backups\GitRepo\
+How to use:
+  - First backup initializes Git repository
+  - Each backup creates a new commit
+  - Keeps last 30 commits automatically
+  - Can restore to any commit
+
+
+ARCHIVE BACKUP (Simple)
+-----------------------
+✓ Simple ZIP files
+✓ No dependencies needed
+✓ Easy to understand
+✓ Can copy/move manually
+✗ Uses more disk space
+✗ Limited to recent backups
+
+Files stored in: .\Backups\Archives\
+How to use:
+  - Each backup creates a new ZIP file
+  - Keeps last 14 days automatically
+  - Can extract ZIPs manually if needed
+
+
+================================================================================
+                            ⚙️ SCHEDULED TASK
+================================================================================
+
+After running Install or CreateSchedule:
+
+Task Name: ComfyUI-DailyBackup
+Schedule: Daily at specified time (default 2:00 AM)
+User: Your Windows account
+Runs even when: On battery, computer asleep (will run when available)
+
+To manage scheduled task:
+  1. Press Win+R
+  2. Type: taskschd.msc
+  3. Find "ComfyUI-DailyBackup"
+
+
+================================================================================
+                              🛡️ SAFETY FEATURES
+================================================================================
+
+• Before any restore, creates a safety backup in %TEMP%
+  Look for folders like: ComfyUI-PreRestore_YYYYMMDD_HHMMSS
+
+• Old backups are automatically cleaned up:
+  - Git: Keeps last 30 commits
+  - Archive: Keeps last 14 days
+
+• Logs all operations to: .\Logs\ComfyUI-Backup_YYYY-MM.log
+
+
+================================================================================
+                           🔧 TROUBLESHOOTING
+================================================================================
+
+ERROR: "Execution of scripts is disabled"
+-----------------------------------------
+Fix: Open PowerShell as Administrator and run:
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+
+ERROR: "Git not found" (when using Git backup)
+----------------------------------------------
+Solution 1: Install Git for Windows
+    Download from: https://git-scm.com/download/win
+
+Solution 2: Use Archive backup instead
+    Add parameter: -BackupType Archive
+
+
+ERROR: "Access denied" when creating scheduled task
+----------------------------------------------------
+Fix: Run PowerShell as Administrator
+    Right-click PowerShell → Run as Administrator
+
+
+ERROR: "Source path does not exist"
+------------------------------------
+Check if ComfyUI Electron is installed at:
+    %LOCALAPPDATA%\Programs\@comfyorgcomfyui-electron
+
+If installed elsewhere, edit the script and change $SourcePath
+
+
+SCHEDULED TASK NOT RUNNING
+---------------------------
+Check Task Scheduler (Win+R → taskschd.msc)
+  - Verify task exists: ComfyUI-DailyBackup
+  - Check "Last Run Time" and "Last Run Result"
+  - Ensure "Run whether user is logged on or not" is NOT checked
+    (unless you provided password during setup)
+
+
+================================================================================
+                              📂 FILE STRUCTURE
+================================================================================
+
+ComfyDesktopBackup/
+│
+├── ComfyUI-Backup.ps1      ← Main script
+├── RunBackup.bat           ← Quick launcher (double-click this)
+├── QuickRestore.bat        ← Quick restore helper
+├── README.md               ← Detailed documentation
+├── USAGE.txt               ← This file
+│
+├── Backups/
+│   ├── GitRepo/            ← Git repository (if using Git)
+│   └── Archives/           ← ZIP files (if using Archive)
+│
+└── Logs/
+    └── ComfyUI-Backup_YYYY-MM.log  ← Monthly log files
+
+
+================================================================================
+                            💡 BEST PRACTICES
+================================================================================
+
+1. BEFORE MAJOR UPDATES
+   Run a manual backup before updating ComfyUI Electron
+
+2. REGULAR SCHEDULE
+   Set up daily automated backups (recommended: 2:00 AM)
+
+3. TEST RESTORE
+   Occasionally test restoring from backup to ensure it works
+
+4. CHECK LOGS
+   Review logs if backups fail: .\Logs\ComfyUI-Backup_YYYY-MM.log
+
+5. DISK SPACE
+   Monitor backup folder size:
+   - Git: Usually small (incremental)
+   - Archive: Each backup is full size
+
+6. BEFORE EXPERIMENTS
+   Create a backup before installing new plugins or making changes
+
+
+================================================================================
+                              📞 SUPPORT
+================================================================================
+
+For issues, suggestions, or improvements:
+  - Check README.md for detailed documentation
+  - Review log files in .\Logs\ folder
+  - Ensure prerequisites are installed (PowerShell 5.1+, Git if using Git backup)
+
+
+================================================================================
+                            ⚡ QUICK REFERENCE
+================================================================================
+
+COMMAND                                         WHAT IT DOES
+--------                                        -------------
+RunBackup.bat                                   Interactive menu
+QuickRestore.bat                                Interactive restore
+.\ComfyUI-Backup.ps1 -Mode Backup               Create backup
+.\ComfyUI-Backup.ps1 -Mode ListBackups          Show all backups
+.\ComfyUI-Backup.ps1 -Mode Rollback             Undo to previous
+.\ComfyUI-Backup.ps1 -Mode Install              Setup wizard
+
+Add -BackupType Git or -BackupType Archive to any command
+
+================================================================================

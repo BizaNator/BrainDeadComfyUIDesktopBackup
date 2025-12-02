@@ -1,0 +1,19 @@
+# Backup folders - don't commit actual backups
+Backups/
+Logs/
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# PowerShell
+*.ps1~
+
+# User-specific files
+*.bak

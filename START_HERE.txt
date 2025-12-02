@@ -1,0 +1,216 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                   COMFYUI ELECTRON BACKUP SYSTEM                             ║
+║                                                                              ║
+║                           🚀 START HERE 🚀                                   ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Welcome! This backup system protects your ComfyUI Electron installation with:
+  ✓ Automated scheduled backups
+  ✓ Version control (Git) or simple archives (ZIP)
+  ✓ Easy restore and rollback
+  ✓ Start menu integration
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  FIRST TIME? DO THIS:                                                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  1. Double-click:  RunBackup.bat
+
+  2. Choose option:  5 (Install/Setup)
+
+  3. Follow the prompts
+
+  4. Done! You now have automatic daily backups.
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  QUICK ACTIONS                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  📦 CREATE BACKUP NOW
+     → Double-click: RunBackup.bat → Option 1
+
+  🔄 UNDO TO PREVIOUS BACKUP
+     → Double-click: QuickRestore.bat → Option 3
+
+  📋 SEE ALL BACKUPS
+     → Double-click: RunBackup.bat → Option 3
+
+  🔧 RESTORE SPECIFIC BACKUP
+     → Double-click: QuickRestore.bat → Option 1 or 2
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  FILES IN THIS FOLDER                                                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  📄 START_HERE.txt ......... This file - quick start guide
+  📄 USAGE.txt .............. Complete usage instructions
+  📄 SCENARIOS.txt .......... Step-by-step guides for common scenarios
+  📄 README.md .............. Full documentation
+
+  🔧 RunBackup.bat .......... Main launcher (double-click this!)
+  🔧 QuickRestore.bat ....... Quick restore helper
+  🔧 ComfyUI-Backup.ps1 ..... PowerShell script (the actual program)
+
+  📁 Backups\ ............... Your backups are stored here
+  📁 Logs\ .................. Operation logs
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  TYPICAL WORKFLOW                                                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Day 1: Setup
+  ────────────
+  Run: RunBackup.bat → Option 5
+  Result: Daily automatic backups at 2 AM
+
+  Before Update/Plugin:
+  ─────────────────────
+  Run: RunBackup.bat → Option 1
+  Result: Manual backup created
+
+  If Something Breaks:
+  ────────────────────
+  Run: QuickRestore.bat → Option 3
+  Result: Reverted to last working backup
+
+  Weekly Check:
+  ─────────────
+  Run: RunBackup.bat → Option 3
+  Result: Verify backups are being created
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  TWO BACKUP TYPES - WHICH TO CHOOSE?                                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  GIT BACKUP (Recommended)
+  ────────────────────────
+  ✓ Uses Git version control
+  ✓ Space efficient - only stores changes
+  ✓ Unlimited restore points
+  ✓ View full history
+  ✗ Requires Git for Windows installed
+
+  ARCHIVE BACKUP (Simple)
+  ───────────────────────
+  ✓ Simple ZIP files
+  ✓ No dependencies
+  ✓ Easy to understand
+  ✗ Uses more disk space
+  ✗ Limited history (14 days)
+
+  DON'T HAVE GIT?
+  Download: https://git-scm.com/download/win
+  Or just use Archive backup - it works great!
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  WHAT GETS BACKED UP?                                                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Location: %LOCALAPPDATA%\Programs\@comfyorgcomfyui-electron
+
+  This includes:
+    • ComfyUI installation
+    • Your custom nodes
+    • Configuration files
+    • Models and checkpoints
+    • Workflows
+    • Everything in that folder!
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  COMMON QUESTIONS                                                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Q: How much space do backups use?
+  A: Git: Small (incremental), Archive: Full copy each time (~5-50 GB depending)
+
+  Q: How many backups are kept?
+  A: Git: Last 30 commits, Archive: Last 14 days
+
+  Q: Can I restore to a different computer?
+  A: Yes! Copy the Backups folder and restore from it.
+
+  Q: Are backups automatic?
+  A: After running Install (Option 5), yes - daily at chosen time.
+
+  Q: Can I run backups manually too?
+  A: Yes! Anytime via RunBackup.bat
+
+  Q: What if restore fails?
+  A: A safety backup is always created in %TEMP% first.
+
+  Q: How do I know backups are working?
+  A: Check Logs folder or run: RunBackup.bat → Option 3
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  NEED HELP?                                                                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  📖 Read USAGE.txt for complete instructions
+  📖 Read SCENARIOS.txt for step-by-step guides
+  📖 Check Logs\ folder for error messages
+  📖 Read README.md for technical details
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  TROUBLESHOOTING                                                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  "Script execution is disabled"
+  ────────────────────────────────
+  Fix: Open PowerShell as Admin, run:
+       Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+  "Git not found"
+  ───────────────
+  Fix 1: Install Git for Windows: https://git-scm.com/download/win
+  Fix 2: Use Archive backup instead (no Git needed)
+
+  "Access denied"
+  ───────────────
+  Fix: Right-click PowerShell → Run as Administrator
+
+  "Source path does not exist"
+  ────────────────────────────
+  Fix: Verify ComfyUI is installed at:
+       %LOCALAPPDATA%\Programs\@comfyorgcomfyui-electron
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  RECOMMENDED SETUP                                                           ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  1. Run Install (RunBackup.bat → Option 5)
+  2. Choose Git backup (if you have Git) or Archive
+  3. Set time to 2:00 AM
+  4. Done!
+
+  Now you have:
+    ✓ Daily automatic backups
+    ✓ Start Menu shortcut
+    ✓ Protection against accidents
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  READY TO BEGIN?                                                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Double-click: RunBackup.bat
+
+  Choose option 5 for first-time setup!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+         Your ComfyUI installation is about to be much safer! 🎉
+
+═══════════════════════════════════════════════════════════════════════════════

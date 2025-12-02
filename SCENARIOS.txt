@@ -1,0 +1,332 @@
+================================================================================
+                      COMFYUI BACKUP - USAGE SCENARIOS
+================================================================================
+
+This guide shows common scenarios and exactly what to do for each.
+
+================================================================================
+SCENARIO 1: First Time Setup
+================================================================================
+
+You just downloaded this script and want to set everything up.
+
+STEPS:
+1. Double-click: RunBackup.bat
+2. Choose option 5 (Install/Setup)
+3. Choose backup type:
+   - Type 1 for Git (recommended if you have Git installed)
+   - Type 2 for Archive (simpler, no dependencies)
+4. Enter time for daily backup (e.g., 02:00)
+5. Done! Script will:
+   - Create scheduled task
+   - Create Start Menu shortcut
+   - Perform first backup
+
+RESULT: Automatic daily backups are now active!
+
+
+================================================================================
+SCENARIO 2: Before Installing a New Plugin
+================================================================================
+
+You want to try a new ComfyUI plugin but want a backup first.
+
+STEPS:
+1. Double-click: RunBackup.bat
+2. Choose option 1 (Git) or 2 (Archive)
+3. Wait for "Backup completed" message
+4. Install your plugin
+5. If something breaks → See SCENARIO 5 (Rollback)
+
+COMMAND LINE:
+    .\ComfyUI-Backup.ps1 -Mode Backup -BackupType Git
+
+
+================================================================================
+SCENARIO 3: Before a ComfyUI Update
+================================================================================
+
+ComfyUI Electron has an update and you want to back up first.
+
+STEPS:
+1. Double-click: RunBackup.bat
+2. Choose option 1 (Git) or 2 (Archive)
+3. Wait for completion
+4. Run the ComfyUI update
+5. If update breaks things → See SCENARIO 5 (Rollback)
+
+ALTERNATIVE: Schedule this automatically
+    RunBackup.bat → Option 5 → Setup daily backup at convenient time
+
+
+================================================================================
+SCENARIO 4: Something Broke - Need to View Backup History
+================================================================================
+
+ComfyUI isn't working and you want to see what backups you have.
+
+STEPS:
+1. Double-click: RunBackup.bat
+2. Choose option 3 (List Available Backups)
+3. You'll see:
+   - Git: List of commits with dates
+   - Archive: List of ZIP files with dates and sizes
+4. Note the commit hash or filename you want
+5. See SCENARIO 6 for restore steps
+
+COMMAND LINE:
+    .\ComfyUI-Backup.ps1 -Mode ListBackups
+
+
+================================================================================
+SCENARIO 5: Something Broke - Quick Rollback
+================================================================================
+
+You just made a change and it broke everything. You want to undo to the last
+working backup (most common scenario).
+
+STEPS:
+1. Double-click: QuickRestore.bat
+2. Choose option 3 (Quick Rollback)
+3. Type G (Git) or A (Archive)
+4. Type "yes" to confirm
+5. Done! Your ComfyUI is restored to previous backup
+
+ALTERNATIVE:
+1. Double-click: RunBackup.bat
+2. Choose option 4 (Rollback to Previous)
+
+COMMAND LINE:
+    .\ComfyUI-Backup.ps1 -Mode Rollback -BackupType Git
+
+WHAT HAPPENS:
+- Your current installation is backed up to %TEMP% first (safety)
+- Previous backup is restored
+- If you change your mind, the safety backup is in your Temp folder
+
+
+================================================================================
+SCENARIO 6: Restore from Specific Backup
+================================================================================
+
+You know exactly which backup you want (e.g., from 3 days ago).
+
+STEPS:
+1. Double-click: QuickRestore.bat
+2. Choose option 1 (Git) or 2 (Archive)
+3. Enter the commit hash or filename shown in backup list
+4. Type "yes" to confirm
+5. Done!
+
+EXAMPLE - GIT:
+    After listing backups, you see:
+    a1b2c3d - 3 days ago - Backup 2025-11-29 02:00:00
+
+    Enter: a1b2c3d
+
+EXAMPLE - ARCHIVE:
+    After listing backups, you see:
+    ComfyUI-Backup_2025-11-29_020015.zip
+
+    Enter: ComfyUI-Backup_2025-11-29_020015.zip
+
+COMMAND LINE:
+    .\ComfyUI-Backup.ps1 -Mode Restore -BackupType Git -RestorePoint a1b2c3d
+    .\ComfyUI-Backup.ps1 -Mode Restore -BackupType Archive -RestorePoint "ComfyUI-Backup_2025-11-29_020015.zip"
+
+
+================================================================================
+SCENARIO 7: Manual Backup Before Risky Operation
+================================================================================
+
+You're about to do something experimental and want a backup NOW.
+
+STEPS:
+1. Double-click: RunBackup.bat
+2. Choose option 1 (Git) or 2 (Archive)
+3. Wait for "Backup completed"
+4. Do your experimental work
+5. If it fails → SCENARIO 5 (Rollback)
+
+COMMAND LINE (faster for advanced users):
+    .\ComfyUI-Backup.ps1 -Mode Backup -BackupType Git
+
+
+================================================================================
+SCENARIO 8: Setting Up Automatic Daily Backups
+================================================================================
+
+You want ComfyUI to back up automatically every night.
+
+STEPS:
+1. Double-click: RunBackup.bat
+2. Choose option 5 (Install/Setup)
+   OR
+   Right-click PowerShell → Run as Administrator
+   Run: .\ComfyUI-Backup.ps1 -Mode CreateSchedule -BackupType Git -ScheduleTime "02:00"
+
+3. Choose your backup time (e.g., 02:00 for 2 AM)
+4. Done!
+
+VERIFY:
+1. Press Win+R
+2. Type: taskschd.msc
+3. Look for: ComfyUI-DailyBackup
+
+WHAT HAPPENS:
+- Every day at your chosen time, a backup runs automatically
+- No user interaction needed
+- Works even if you're away from computer (runs when you return)
+
+
+================================================================================
+SCENARIO 9: Checking If Backups Are Working
+================================================================================
+
+You set up automatic backups and want to verify they're running.
+
+STEPS:
+1. Check for new backups:
+   - Double-click: RunBackup.bat → Option 3
+   - Look for recent dates
+
+2. Check logs:
+   - Open folder: .\Logs\
+   - Open latest: ComfyUI-Backup_YYYY-MM.log
+   - Look for "Backup completed successfully"
+
+3. Check scheduled task:
+   - Win+R → taskschd.msc
+   - Find: ComfyUI-DailyBackup
+   - Check "Last Run Time" and "Last Run Result"
+
+
+================================================================================
+SCENARIO 10: Moving to a New Computer
+================================================================================
+
+You're setting up ComfyUI on a new computer and want your latest backup.
+
+OPTION A: Using Git Backup
+1. Copy entire "Backups\GitRepo" folder to new computer
+2. Copy this script to new computer
+3. Run: .\ComfyUI-Backup.ps1 -Mode Restore -BackupType Git -RestorePoint HEAD
+
+OPTION B: Using Archive Backup
+1. Find latest ZIP in "Backups\Archives\"
+2. Copy to new computer
+3. Extract to: %LOCALAPPDATA%\Programs\@comfyorgcomfyui-electron
+
+
+================================================================================
+SCENARIO 11: Cleaning Up Old Backups Manually
+================================================================================
+
+You want to free up disk space by removing old backups.
+
+GIT BACKUPS:
+- Already automatically pruned (keeps last 30 commits)
+- To start fresh: Delete .\Backups\GitRepo folder
+- Next backup will recreate it
+
+ARCHIVE BACKUPS:
+- Already automatically cleaned (keeps last 14 days)
+- To remove more: Delete old ZIP files from .\Backups\Archives\
+- Safe to delete manually - they're just ZIP files
+
+
+================================================================================
+SCENARIO 12: I Restored But Want to Go Back
+================================================================================
+
+You restored an old backup but realize you want the newer version.
+
+STEPS:
+1. Check your Temp folder for safety backup:
+   - Press Win+R
+   - Type: %TEMP%
+   - Look for folder: ComfyUI-PreRestore_YYYYMMDD_HHMMSS
+   - Copy that folder to: %LOCALAPPDATA%\Programs\@comfyorgcomfyui-electron
+
+2. Or restore from a later backup:
+   - List backups (SCENARIO 4)
+   - Restore from newer date (SCENARIO 6)
+
+
+================================================================================
+SCENARIO 13: Testing the Restore Process
+================================================================================
+
+You want to make sure restore works before you need it.
+
+STEPS:
+1. Make a test backup: RunBackup.bat → Option 1
+2. Change something small in ComfyUI (note what you changed)
+3. Make another backup: RunBackup.bat → Option 1
+4. List backups: RunBackup.bat → Option 3
+5. Restore first backup: QuickRestore.bat
+6. Verify your change is gone
+7. Restore second backup: QuickRestore.bat
+8. Verify your change is back
+
+
+================================================================================
+SCENARIO 14: Backup Failed - Troubleshooting
+================================================================================
+
+The backup script ran but failed.
+
+STEPS:
+1. Check the log file:
+   - Open: .\Logs\ComfyUI-Backup_YYYY-MM.log
+   - Look for [Error] entries
+
+2. Common issues:
+
+   ERROR: "Git not found"
+   → Install Git for Windows OR use -BackupType Archive
+
+   ERROR: "Source path does not exist"
+   → Verify ComfyUI is installed at:
+     %LOCALAPPDATA%\Programs\@comfyorgcomfyui-electron
+
+   ERROR: "Access denied"
+   → Run PowerShell as Administrator
+
+   ERROR: "Execution of scripts is disabled"
+   → Open PowerShell as Admin, run:
+     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+3. Try manual backup with verbose output:
+   .\ComfyUI-Backup.ps1 -Mode Backup -BackupType Archive -Verbose
+
+
+================================================================================
+QUICK DECISION TREE
+================================================================================
+
+Need to back up NOW?
+└─→ RunBackup.bat → Option 1 or 2
+
+Something broke, need to undo?
+└─→ QuickRestore.bat → Option 3 (Quick Rollback)
+
+Want automatic daily backups?
+└─→ RunBackup.bat → Option 5 (Install)
+
+Want to see backup history?
+└─→ RunBackup.bat → Option 3 (List Backups)
+
+Want to restore specific old backup?
+└─→ QuickRestore.bat → Option 1 or 2 → Enter backup ID
+
+First time using script?
+└─→ RunBackup.bat → Option 5 (Install)
+
+Want Start Menu shortcut?
+└─→ RunBackup.bat → Option 5 (Install)
+
+Need to verify backups are working?
+└─→ Check .\Logs\ folder OR RunBackup.bat → Option 3
+
+================================================================================
