@@ -1,0 +1,132 @@
+================================================================================
+                    GITHUB REPOSITORY SETUP INSTRUCTIONS
+================================================================================
+
+The local git repository has been initialized and committed.
+Now you need to create the GitHub repository and push to it.
+
+================================================================================
+OPTION 1: Using GitHub Website (Easiest)
+================================================================================
+
+1. Go to: https://github.com/new
+
+2. Fill in the form:
+   Repository name:    ComfyUI-Backup
+   Description:        Comprehensive backup solution for ComfyUI Electron with Git versioning, scheduled tasks, and easy restore capabilities
+   Visibility:         Public (or Private if you prefer)
+
+   ⚠️ DO NOT initialize with README, .gitignore, or license
+   (We already have these files)
+
+3. Click "Create repository"
+
+4. GitHub will show you commands. IGNORE the first set.
+   Use these commands instead:
+
+   Copy and run in PowerShell (in this folder):
+
+   git remote add origin https://github.com/YOUR_USERNAME/ComfyUI-Backup.git
+   git branch -M main
+   git push -u origin main
+
+   (Replace YOUR_USERNAME with your actual GitHub username)
+
+
+================================================================================
+OPTION 2: Using GitHub CLI (If you have it installed)
+================================================================================
+
+If you have GitHub CLI (gh) installed:
+
+cd "C:\tools\ComfyDesktopBackup"
+
+gh repo create ComfyUI-Backup --public --source=. --description="Comprehensive backup solution for ComfyUI Electron with Git versioning, scheduled tasks, and easy restore capabilities" --push
+
+
+================================================================================
+OPTION 3: Manual Commands (Step by Step)
+================================================================================
+
+1. Create repository on GitHub.com first:
+   https://github.com/new
+   Name: ComfyUI-Backup
+   Make it public or private
+
+2. Open PowerShell in C:\tools\ComfyDesktopBackup
+
+3. Run these commands (replace YOUR_USERNAME):
+
+   git remote add origin https://github.com/YOUR_USERNAME/ComfyUI-Backup.git
+   git branch -M main
+   git push -u origin main
+
+4. Enter your GitHub credentials when prompted
+
+
+================================================================================
+VERIFICATION
+================================================================================
+
+After pushing, verify it worked:
+
+1. Visit: https://github.com/YOUR_USERNAME/ComfyUI-Backup
+
+2. You should see:
+   ✓ ComfyUI-Backup.ps1
+   ✓ RunBackup.bat
+   ✓ QuickRestore.bat
+   ✓ README.md
+   ✓ START_HERE.txt
+   ✓ USAGE.txt
+   ✓ SCENARIOS.txt
+   ✓ .gitignore
+
+   ✗ NO Backups/ folder (excluded by .gitignore)
+   ✗ NO Logs/ folder (excluded by .gitignore)
+
+
+================================================================================
+CURRENT STATUS
+================================================================================
+
+✅ Local git repository initialized
+✅ Initial commit created
+✅ .gitignore configured (excludes Backups/ and Logs/)
+⏳ Waiting for GitHub repository creation and push
+
+All files are ready to push!
+
+
+================================================================================
+SUGGESTED README TOPICS (for GitHub)
+================================================================================
+
+Your README.md already includes:
+- Features overview
+- Quick start guide
+- Installation instructions
+- Usage examples
+- Parameters reference
+- File structure
+- Git vs Archive comparison
+- Safety features
+- Troubleshooting
+- Examples
+
+This is perfect for GitHub!
+
+
+================================================================================
+FUTURE UPDATES
+================================================================================
+
+To push future updates:
+
+1. Make your changes
+2. git add -A
+3. git commit -m "Description of changes"
+4. git push
+
+
+================================================================================
