@@ -47,27 +47,33 @@
 - Selecting option 3 triggered Archive rollback (should be option 2)
 
 **Root Cause**:
-- The rollback submenu used `else if` chaining for multiple conditions
-- Main menu used separate `if` statements for each option
-- Batch file `else if` syntax caused parsing issues with nested conditionals
-- All numeric inputs (1, 2, 3) were falling through to the else block
+- The rollback submenu was NESTED inside `if "%choice%"=="4" (` block
+- Batch files cannot reliably parse nested if statements at multiple indentation levels
+- The batch parser gets confused about which closing `)` belongs to which `if` block
+- This caused inner if statements to fail or execute incorrectly
 
 **Solution**:
-- Replaced `else if` chain with separate `if` statements (matching main menu pattern)
-- Removed whitespace trimming (not needed with correct if structure)
-- Each option now has its own independent if block with goto statements
-- Invalid choice handling at the end without else clause
+- Moved rollback logic OUT of the main if block using labels and goto
+- Changed `if "%choice%"=="4" (` to `if "%choice%"=="4" goto rollback`
+- Created separate `:rollback` label section with its own if statements
+- This avoids nesting and makes each if block independent
 
-**Code Change** (RunBackup.bat:57-77 and QuickRestore.bat:72-108):
+**Code Change** (RunBackup.bat:47,76-114 and QuickRestore.bat:62,83-139):
 ```batch
-# BEFORE (broken):
-if "%backuptype%"=="1" (...) else if "%backuptype%"=="2" (...) else if "%backuptype%"=="3" (...)
+# BEFORE (broken - nested if blocks):
+if "%choice%"=="4" (
+    set /p backuptype="..."
+    if "%backuptype%"=="1" (...)
+    if "%backuptype%"=="2" (...)
+)
 
-# AFTER (working):
+# AFTER (working - separate label):
+if "%choice%"=="4" goto rollback
+
+:rollback
+set /p backuptype="..."
 if "%backuptype%"=="1" (...)
 if "%backuptype%"=="2" (...)
-if "%backuptype%"=="3" (...)
-echo Invalid choice!
 ```
 
 ---

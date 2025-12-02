@@ -59,54 +59,7 @@ if "%choice%"=="2" (
     )
 )
 
-if "%choice%"=="3" (
-    echo.
-    echo Choose backup type to rollback:
-    echo   1. Git
-    echo   2. Archive
-    echo   3. Cancel
-    echo.
-    set /p backuptype="Enter choice (1-3): "
-    echo.
-
-    if "%backuptype%"=="1" (
-        echo WARNING: This will replace your current installation!
-        set /p confirm="Are you sure? (yes/no): "
-        if /i "%confirm%"=="yes" (
-            echo.
-            echo Rollback using Git...
-            powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
-            goto continue
-        )
-        echo Cancelled.
-        timeout /t 2 >nul
-        goto menu
-    )
-
-    if "%backuptype%"=="2" (
-        echo WARNING: This will replace your current installation!
-        set /p confirm="Are you sure? (yes/no): "
-        if /i "%confirm%"=="yes" (
-            echo.
-            echo Rollback using Archive...
-            powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
-            goto continue
-        )
-        echo Cancelled.
-        timeout /t 2 >nul
-        goto menu
-    )
-
-    if "%backuptype%"=="3" (
-        echo Cancelled.
-        timeout /t 2 >nul
-        goto menu
-    )
-
-    echo Invalid choice! Please try again.
-    timeout /t 2 >nul
-    goto menu
-)
+if "%choice%"=="3" goto rollback
 
 if "%choice%"=="4" (
     echo.
@@ -126,3 +79,61 @@ echo ====================================
 echo.
 set /p return="Press ENTER to return to menu..."
 goto menu
+
+:rollback
+cls
+echo.
+echo ====================================
+echo   ComfyUI Rollback
+echo ====================================
+echo.
+echo Choose backup type to rollback:
+echo   1. Git
+echo   2. Archive
+echo   3. Cancel
+echo.
+set /p backuptype="Enter choice (1-3): "
+
+if "%backuptype%"=="1" (
+    echo.
+    echo WARNING: This will replace your current installation!
+    set /p confirm="Are you sure? (yes/no): "
+    if /i "%confirm%"=="yes" (
+        echo.
+        echo Rollback using Git...
+        powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
+        goto continue
+    )
+    echo.
+    echo Cancelled.
+    timeout /t 2 >nul
+    goto menu
+)
+
+if "%backuptype%"=="2" (
+    echo.
+    echo WARNING: This will replace your current installation!
+    set /p confirm="Are you sure? (yes/no): "
+    if /i "%confirm%"=="yes" (
+        echo.
+        echo Rollback using Archive...
+        powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
+        goto continue
+    )
+    echo.
+    echo Cancelled.
+    timeout /t 2 >nul
+    goto menu
+)
+
+if "%backuptype%"=="3" (
+    echo.
+    echo Cancelled.
+    timeout /t 2 >nul
+    goto menu
+)
+
+echo.
+echo Invalid choice! Please try again.
+timeout /t 2 >nul
+goto rollback

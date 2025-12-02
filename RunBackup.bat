@@ -44,38 +44,7 @@ if "%choice%"=="3" (
     goto continue
 )
 
-if "%choice%"=="4" (
-    echo.
-    echo Choose backup type to rollback:
-    echo   1. Git
-    echo   2. Archive
-    echo   3. Cancel
-    echo.
-    set /p backuptype="Enter choice (1-3): "
-    echo.
-
-    if "%backuptype%"=="1" (
-        echo Rollback using Git...
-        powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
-        goto continue
-    )
-
-    if "%backuptype%"=="2" (
-        echo Rollback using Archive...
-        powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
-        goto continue
-    )
-
-    if "%backuptype%"=="3" (
-        echo Cancelled.
-        timeout /t 2 >nul
-        goto menu
-    )
-
-    echo Invalid choice! Please try again.
-    timeout /t 2 >nul
-    goto menu
-)
+if "%choice%"=="4" goto rollback
 
 if "%choice%"=="5" (
     echo.
@@ -103,3 +72,43 @@ echo ====================================
 echo.
 set /p return="Press ENTER to return to menu..."
 goto menu
+
+:rollback
+cls
+echo.
+echo ====================================
+echo   ComfyUI Rollback
+echo ====================================
+echo.
+echo Choose backup type to rollback:
+echo   1. Git
+echo   2. Archive
+echo   3. Cancel
+echo.
+set /p backuptype="Enter choice (1-3): "
+
+if "%backuptype%"=="1" (
+    echo.
+    echo Rollback using Git...
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
+    goto continue
+)
+
+if "%backuptype%"=="2" (
+    echo.
+    echo Rollback using Archive...
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
+    goto continue
+)
+
+if "%backuptype%"=="3" (
+    echo.
+    echo Cancelled.
+    timeout /t 2 >nul
+    goto menu
+)
+
+echo.
+echo Invalid choice! Please try again.
+timeout /t 2 >nul
+goto rollback
