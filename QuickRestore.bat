@@ -68,8 +68,13 @@ if "%choice%"=="3" (
     if /i "%confirm%"=="yes" (
         echo.
         if /i "%backuptype%"=="G" (
+            echo Using Git backup...
             powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Git
+        ) else if /i "%backuptype%"=="A" (
+            echo Using Archive backup...
+            powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
         ) else (
+            echo Invalid choice. Using Archive backup as default...
             powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ComfyUI-Backup.ps1" -Mode Rollback -BackupType Archive
         )
         goto continue

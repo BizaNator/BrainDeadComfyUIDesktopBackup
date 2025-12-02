@@ -23,7 +23,8 @@
       "Bash(powershell.exe:*)",
       "Bash(cmd /c RunBackup.bat)",
       "Bash(git push:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
