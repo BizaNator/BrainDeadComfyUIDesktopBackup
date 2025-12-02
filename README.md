@@ -51,19 +51,32 @@ This menu:
 
 Run the install wizard for automated setup:
 
-**Via Menu**: Double-click `RunBackup.bat` → Choose option 5
+**Via Menu**:
+1. **Right-click** `RunBackup.bat` → **Run as Administrator** ⚠️
+2. Choose option 5 (Install/Setup)
 
-**Via PowerShell**:
+**Via PowerShell** (Run as Administrator):
 ```powershell
 .\ComfyUI-Backup.ps1 -Mode Install
 ```
 
+⚠️ **Important Notes:**
+- **Administrator privileges required** for creating scheduled tasks
+- Time format must be **HH:mm** (24-hour format with colon)
+  - ✅ Correct: `02:00`, `14:30`, `23:45`
+  - ❌ Incorrect: `2:00`, `2am`, `14.30`
+
 This will:
 1. Let you choose Git or Archive backup
-2. Set backup schedule time
-3. Create scheduled task
-4. Create Start Menu shortcut
+2. Set backup schedule time (must be in HH:mm format)
+3. Create scheduled task (runs automatically at specified time)
+4. Create Start Menu shortcut (for manual backups)
 5. Perform initial backup
+
+**What gets created:**
+- **Scheduled Task**: Runs backup automatically daily at your chosen time
+- **Start Menu Shortcut**: Found in Start Menu → "ComfyUI Backup" (for running manual backups)
+- **Note**: Does NOT add to Windows Startup folder (backups run via scheduled task instead)
 
 ### Advanced: Manual PowerShell Usage
 
@@ -169,7 +182,19 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 **"Access denied" when creating scheduled task**
-- Run PowerShell as Administrator
+- **Solution**: Right-click `RunBackup.bat` → **Run as Administrator**
+- Or run PowerShell as Administrator before executing commands
+- Scheduled tasks require admin privileges to create
+
+**Scheduled task not created during Install**
+- Make sure you ran the batch file or PowerShell as Administrator
+- Check Task Scheduler (Win+R → `taskschd.msc`) to see if task exists
+- Task name: "ComfyUI-DailyBackup"
+
+**Invalid time format error**
+- Time must be in **HH:mm** format (24-hour with colon)
+- Examples: `02:00`, `14:30`, `23:00`
+- NOT: `2:00`, `2am`, `14.30`
 
 **Git not found**
 - Install Git for Windows: https://git-scm.com/download/win
@@ -179,12 +204,19 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 - Verify ComfyUI Electron is installed at:
   `%LOCALAPPDATA%\Programs\@comfyorgcomfyui-electron`
 
+**Can't find Start Menu shortcut**
+- Look in Start Menu search for "ComfyUI Backup"
+- Located at: `%APPDATA%\Microsoft\Windows\Start Menu\Programs\ComfyUI Backup.lnk`
+- Note: This is for manual backups, NOT automatic startup
+- Automatic backups run via Windows Task Scheduler
+
 ## Examples
 
 **Daily automated Git backups at 2 AM:**
-- Double-click `RunBackup.bat`
+- Right-click `RunBackup.bat` → **Run as Administrator**
 - Choose option 5 (Install/Setup)
-- Select Git backup, enter time 02:00
+- Select Git backup (option 1)
+- Enter time: `02:00` (must include colon in HH:mm format)
 
 **Manual backup before major changes:**
 - Double-click `RunBackup.bat`

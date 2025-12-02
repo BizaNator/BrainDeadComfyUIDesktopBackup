@@ -17,13 +17,17 @@ Welcome! This backup system protects your ComfyUI Electron installation with:
 ║  FIRST TIME? DO THIS:                                                        ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
-  1. Double-click:  RunBackup.bat
+  1. RIGHT-CLICK:  RunBackup.bat → Run as Administrator ⚠️
 
   2. Choose option:  5 (Install/Setup)
 
-  3. Follow the prompts
+  3. Select backup type:  Git (option 1) or Archive (option 2)
 
-  4. Done! You now have automatic daily backups.
+  4. Enter time in HH:mm format:  Example: 02:00 (must include colon!)
+
+  5. Done! You now have automatic daily backups.
+
+  ⚠️ IMPORTANT: Admin privileges required for scheduled task creation!
 
 
 ╔══════════════════════════════════════════════════════════════════════════════╗
@@ -149,6 +153,14 @@ Welcome! This backup system protects your ComfyUI Electron installation with:
 
   Q: How do I know backups are working?
   A: Check Logs folder or run: RunBackup.bat → Option 3
+
+  Q: Where is the Start Menu shortcut?
+  A: Search Start Menu for "ComfyUI Backup" - it's for MANUAL backups only.
+     Automatic backups run via Windows Task Scheduler, NOT on startup.
+
+  Q: Does it run at Windows startup?
+  A: No - backups run at your scheduled time (e.g., 2 AM) via Task Scheduler.
+     The Start Menu shortcut is only for running manual backups.
 
 
 ╔══════════════════════════════════════════════════════════════════════════════╗
