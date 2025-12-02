@@ -52,6 +52,7 @@ if "%choice%"=="4" (
     echo   3. Cancel
     echo.
     set /p backuptype="Enter choice (1-3): "
+    set "backuptype=%backuptype: =%"
     echo.
     if "%backuptype%"=="1" (
         echo Rollback using Git...

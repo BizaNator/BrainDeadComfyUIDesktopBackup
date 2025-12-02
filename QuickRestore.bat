@@ -67,6 +67,7 @@ if "%choice%"=="3" (
     echo   3. Cancel
     echo.
     set /p backuptype="Enter choice (1-3): "
+    set "backuptype=%backuptype: =%"
     echo.
     if "%backuptype%"=="1" (
         echo WARNING: This will replace your current installation!

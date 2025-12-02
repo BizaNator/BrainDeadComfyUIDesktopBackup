@@ -10,6 +10,7 @@
 **Tests Passed**: 8 ✅
 **Tests Failed**: 0 ❌
 **Success Rate**: 100%
+**Issues Fixed**: 3 ✅
 
 ---
 
@@ -35,7 +36,35 @@
 
 ---
 
-### Issue 2: Git Log Not Displaying in ListBackups
+### Issue 2: Numbered Menu Off-By-One Bug in Rollback Selection
+**Severity**: High
+**Status**: ✅ Fixed
+
+**Problem**:
+- User reported: "1 returns not found - 2 returns GIT, 3 returns archieve"
+- Selecting option 1 fell through to "Invalid choice" error
+- Selecting option 2 triggered Git rollback (should be option 1)
+- Selecting option 3 triggered Archive rollback (should be option 2)
+
+**Root Cause**:
+- The `set /p` command can capture whitespace (spaces) along with the input
+- String comparison `"%backuptype%"=="1"` failed when variable contained " 1" or "1 "
+- Caused first condition to fail, making subsequent options map incorrectly
+
+**Solution**:
+- Added whitespace trimming after capturing input: `set "backuptype=%backuptype: =%"`
+- This removes all spaces from the input variable before comparison
+- Applied to both RunBackup.bat and QuickRestore.bat
+
+**Code Change** (RunBackup.bat:55 and QuickRestore.bat:70):
+```batch
+set /p backuptype="Enter choice (1-3): "
+set "backuptype=%backuptype: =%"
+```
+
+---
+
+### Issue 3: Git Log Not Displaying in ListBackups
 **Severity**: Medium
 **Status**: ✅ Fixed
 
@@ -259,10 +288,11 @@ Archive Backups:
 
 ## Conclusion
 
-The ComfyUI Backup Script has passed all basic functional tests. The two issues discovered during testing have been successfully resolved:
+The ComfyUI Backup Script has passed all basic functional tests. The three issues discovered during testing have been successfully resolved:
 
 1. ✅ Git repository now persists correctly across backups
-2. ✅ ListBackups now displays Git commit history properly
+2. ✅ Numbered menu rollback selection now works correctly (whitespace trimming fix)
+3. ✅ ListBackups now displays Git commit history properly
 
 The script is **ready for production use** with the following notes:
 - Core backup functionality verified
